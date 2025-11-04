@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Random Image Storage</title>
+  
+  <!-- PWA Configuration -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e293b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Image Storage">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -91,6 +100,12 @@
 
       useEffect(() => {
         loadImages();
+        // Register service worker for PWA
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/service-worker.js')
+            .then(reg => console.log('Service Worker registered'))
+            .catch(err => console.log('Service Worker registration failed'));
+        }
       }, []);
 
       useEffect(() => {
@@ -323,7 +338,6 @@
                         <Upload className="text-blue-400" size={36} />
                         <div className="text-center">
                           <p className="text-white font-semibold">Click to upload images</p>
-                     
                         </div>
                       </div>
                       <input type="file" multiple accept="image/*" onChange={handleImageUpload} disabled={uploading} className="hidden" />
